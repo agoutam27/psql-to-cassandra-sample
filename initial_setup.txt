@@ -1,0 +1,151 @@
+CREATE KEYSPACE IF NOT EXISTS "dvdrental" 
+  WITH REPLICATION = {
+    'class' : 'SimpleStrategy',
+    'replication_factor' : 1
+  }
+AND DURABLE_WRITES = false; 
+
+USE "dvdrental";
+
+CREATE TYPE IF NOT EXISTS "dvdrental".address (
+  "address" text,
+  "address2" text,
+  "district" varchar,
+  "city" varchar,
+  "Country" varchar,
+  "postal_code" varchar,
+  "phone" bigint
+);
+
+CREATE TYPE IF NOT EXISTS "dvdrental".actor (
+  "last_name" varchar,
+  "first_name" varchar
+);
+
+CREATE TABLE IF NOT EXISTS "dvdrental"."film" (
+  "category" varchar,
+  "film_id" smallint,
+  "title" varchar,
+  "description" text,
+  "release_year" smallint,
+  "language" varchar,
+  "rental_duration" tinyint,
+  "rental_rate" float,
+  "length" smallint,
+  "replacement_cost" float,
+  "rating" varchar,
+  "last_updated" timestamp,
+  "special_features" text,
+  "fulltext" text,
+  "actors" frozen<set<frozen<actor>>>,
+  PRIMARY KEY ("category", "film_id")
+)
+WITH CLUSTERING ORDER BY ("film_id" ASC);
+
+CREATE TABLE IF NOT EXISTS "dvdrental"."rental" (
+  "rental_id" smallint,
+  "rental_date" timestamp,
+  "film_id" smallint,
+  "store_id" smallint,
+  "customer_id" smallint,
+  "staff_id" smallint,
+  "return_date" timestamp,
+  "amount" float,
+  "payment_date" timestamp,
+  "last_updated" timestamp,
+  PRIMARY KEY ("staff_id", "rental_date", "rental_id")
+)
+WITH CLUSTERING ORDER BY ("rental_date" ASC);
+
+CREATE TABLE IF NOT EXISTS "dvdrental"."staff" (
+  "staff_id" smallint,
+  "first_name" varchar,
+  "last_name" varchar,
+  "address" frozen<address>,
+  "email" text,
+  "store_id" smallint,
+  "active" boolean,
+  "username" varchar,
+  "password" varchar,
+  "picture" blob,
+  "last_updated" timestamp,
+  PRIMARY KEY ("staff_id", "first_name", "email", "last_name", "store_id")
+)
+WITH CLUSTERING ORDER BY ("first_name" ASC, "email" ASC, "last_name" ASC, "store_id" ASC);
+
+CREATE TABLE IF NOT EXISTS "dvdrental"."customer" (
+  "customer_id" smallint,
+  "store_id" smallint,
+  "first_name" varchar,
+  "last_name" varchar,
+  "email" varchar,
+  "address" frozen<address>,
+  "active_bool" boolean,
+  "create_date" date,
+  "active" tinyint,
+  "last_updated" timestamp,
+  PRIMARY KEY ("customer_id", "first_name", "last_name", "email")
+)
+WITH CLUSTERING ORDER BY ("first_name" ASC, "last_name" ASC, "email" ASC);
+
+CREATE TABLE IF NOT EXISTS "dvdrental"."store" (
+  "store_id" smallint,
+  "manager_staff_id" smallint,
+  "address" frozen<address>,
+  "last_updated" timestamp,
+  PRIMARY KEY ("store_id", "manager_staff_id")
+)
+WITH CLUSTERING ORDER BY ("manager_staff_id" ASC);
+
+CREATE TABLE IF NOT EXISTS "dvdrental"."rental_by_duration" (
+  "rental_age" bigint,
+  "rental_id" smallint,
+  "customer_id" smallint,
+  "rental_date" timestamp,
+  "film_id" smallint,
+  "last_updated" timestamp,
+  PRIMARY KEY ("rental_age", "film_id", "customer_id")
+)
+WITH CLUSTERING ORDER BY ("film_id" ASC, "customer_id" ASC);
+
+CREATE OR REPLACE FUNCTION group(state map<text, int>, ts timestamp, format text)
+    CALLED ON NULL INPUT
+    RETURNS map<text, int>
+    LANGUAGE java AS $$
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(format);
+        try {
+            String s = sdf.format(ts);  
+            int count = state.get(s) == null ? 1 : state.get(s)+1;
+            state.put(s, count);
+            return state;
+        } catch(Exception e){
+            return state;
+        }    
+    $$;  
+
+CREATE OR REPLACE AGGREGATE group_and_count(timestamp, text)
+    SFUNC group
+    STYPE map<text, int>
+    INITCOND {};
+
+
+CREATE OR REPLACE FUNCTION top(state list<bigint>, value bigint, num int)
+    CALLED ON NULL INPUT
+    RETURNS list<bigint>
+    LANGUAGE java AS $$
+        try {
+            state.add(value);
+            Collections.sort(state);
+            if (state.size() > num) {
+                state.remove(0);
+            }
+            return state;
+        } catch(Exception e) {
+            return state;
+        }
+    $$;
+
+CREATE OR REPLACE AGGREGATE topItems(bigint, int)
+    SFUNC top
+    STYPE list<bigint>
+    INITCOND [];
