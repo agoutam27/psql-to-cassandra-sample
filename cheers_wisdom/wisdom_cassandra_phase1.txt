@@ -1,0 +1,203 @@
+// cassandra table creation then es mapping creation
+
+CREATE KEYSPACE wisdom_users WITH replication = {'class': 'NetworkTopologyStrategy', 'DC1': '2'}  AND durable_writes = false;
+
+CREATE TABLE wisdom_users.school (
+    userid text,
+    name text,
+    date_created timestamp,
+    "isDeleted" boolean,
+    "isUpdated" boolean,
+    visibility_status text,
+    PRIMARY KEY ("userid", "name")
+) WITH bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+CREATE CUSTOM INDEX elastic_school_idx ON wisdom_users.school () USING 'org.elassandra.index.ExtendedElasticSecondaryIndex';
+
+CREATE TABLE wisdom_users.occupational_interest (
+    userid text,
+    interest text,
+    date_created timestamp,
+    PRIMARY KEY("userid", "interest")
+) WITH bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+CREATE CUSTOM INDEX elastic_occupational_interest_idx ON wisdom_users.occupational_interest () USING 'org.elassandra.index.ExtendedElasticSecondaryIndex';
+
+CREATE TABLE wisdom_users.user_details (
+    userid text PRIMARY KEY,
+    area text,
+    city text,
+    country text,
+    device_token text,
+    device_type text,
+    display_name text,
+    dob timestamp,
+    email text,
+    first_name text,
+    gender text,
+    language text,
+    last_name text,
+    lat double,
+    long double,
+    pincode bigint
+) WITH bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+CREATE CUSTOM INDEX elastic_user_details_idx ON wisdom_users.user_details () USING 'org.elassandra.index.ExtendedElasticSecondaryIndex';
+
+CREATE TABLE wisdom_users.college (
+    userid text,
+    name text,
+    date_created timestamp,
+    "isDeleted" boolean,
+    "isUpdated" boolean,
+    visibility_status text,
+    PRIMARY KEY ("userid", "name")
+) WITH bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+CREATE CUSTOM INDEX elastic_college_idx ON wisdom_users.college () USING 'org.elassandra.index.ExtendedElasticSecondaryIndex';
+
+CREATE TABLE wisdom_users.interest (
+    userid text,
+    interest text,
+    date_created timestamp,
+    PRIMARY KEY("userid", "interest")
+) WITH bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+CREATE CUSTOM INDEX elastic_interest_idx ON wisdom_users.interest () USING 'org.elassandra.index.ExtendedElasticSecondaryIndex';
+
+CREATE TABLE wisdom_users.situational_interest (
+    userid text,
+    interest text,
+    date_created timestamp,
+    PRIMARY KEY("userid", "interest")
+) WITH bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+CREATE CUSTOM INDEX elastic_situational_interest_idx ON wisdom_users.situational_interest () USING 'org.elassandra.index.ExtendedElasticSecondaryIndex';
+
+CREATE TABLE wisdom_users.occupation (
+    userid text,
+    name text,
+    date_created timestamp,
+    "isDeleted" boolean,
+    "isUpdated" boolean,
+    visibility_status text,
+    PRIMARY KEY ("userid", "name")
+) WITH bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+CREATE CUSTOM INDEX elastic_occupation_idx ON wisdom_users.occupation () USING 'org.elassandra.index.ExtendedElasticSecondaryIndex';
+
+
+
+
+
+// DUMMY Data-
+
+INSERT INTO wisdom_users.user_details (userid,area,city,country,device_token,device_type,display_name,dob,email,first_name,gender,language,last_name,lat,long,pincode)
+VALUES('user1', 'Area 1', 'City 1', 'Country 1', 'Device Token 1', 'Device Type 1', 'Display Name 1', '1999-01-01', 'email1@mail.com', 'A1', 'M', 'EN', 'B1', 110.12, 90.60, 500001);
+
+INSERT INTO wisdom_users.user_details (userid,area,city,country,device_token,device_type,display_name,dob,email,first_name,gender,language,last_name,lat,long,pincode)
+VALUES('user2', 'Area 1', 'City 1', 'Country 1', 'Device Token 2', 'Device Type 1', 'Display Name 2', '1999-01-01', 'email11@mail.com', 'A2', 'M', 'GJ', 'B2', 140.44, 86.70, 500001);
+
+INSERT INTO wisdom_users.user_details (userid,area,city,country,device_token,device_type,display_name,dob,email,first_name,gender,language,last_name,lat,long,pincode)
+VALUES('user3', 'Area 1', 'City 1', 'Country 1', 'Device Token 3', 'Device Type 1', 'Display Name 3', '1999-02-01', 'email2@mail.com', 'A3', 'F', 'EN', 'B3', 129.15, 47.11, 500001);
+
+INSERT INTO wisdom_users.user_details (userid,area,city,country,device_token,device_type,display_name,dob,email,first_name,gender,language,last_name,lat,long,pincode)
+VALUES('user4', 'Area 2', 'City 2', 'Country 1', 'Device Token 4', 'Device Type 3', 'Display Name 4', '2000-01-01', 'email3@mail.com', 'A4', 'F', 'EN', 'B4', 166.12, 34.22, 500002);
+
+INSERT INTO wisdom_users.user_details (userid,area,city,country,device_token,device_type,display_name,dob,email,first_name,gender,language,last_name,lat,long,pincode)
+VALUES('user5', 'Area 3', 'City 3', 'Country 2', 'Device Token 5', 'Device Type 2', 'Display Name 4', '1999-11-01', 'email4@mail.com', 'A4', 'O', 'HI', 'B4', 152.53, 56.43, 500003);
+
+INSERT INTO wisdom_users.user_details (userid,area,city,country,device_token,device_type,display_name,dob,email,first_name,gender,language,last_name,lat,long,pincode)
+VALUES('user6', 'Area 3', 'City 3', 'Country 2', 'Device Token 6', 'Device Type 3', 'Display Name 5', '1990-01-01', 'email5@mail.com', 'A5', 'M', 'HI', 'B5', 101.02, 63.12, 500003);
+
+INSERT INTO wisdom_users.user_details (userid,area,city,country,device_token,device_type,display_name,dob,email,first_name,gender,language,last_name,lat,long,pincode)
+VALUES('user7', 'Area 4', 'City 4', 'Country 2', 'Device Token 7', 'Device Type 2', 'Display Name 6', '2005-01-01', 'email6@mail.com', 'A6', 'F', 'GJ', 'B6', 132.55, 72.87, 500004);
+
+
+// Update Query example
+
+UPDATE wisdom_users.user_details SET lat = 111.11 WHERE userid = 'user7';

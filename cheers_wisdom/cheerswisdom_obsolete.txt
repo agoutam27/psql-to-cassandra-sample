@@ -1,0 +1,119 @@
+CREATE KEYSPACE IF NOT EXISTS "cheersusers" 
+  WITH REPLICATION = {
+    'class' : 'NetworkTopologyStrategy',
+    'DC1' : 2
+  }
+AND DURABLE_WRITES = false;
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/users/" -d '{
+    "settings": { "keyspace" : "cheersusers"},
+    "mappings" : {
+        "user_details": {
+            "properties": {
+                "userid": {"type" : "keyword", "cql_collection": "singleton"},
+                "first_name": {"type" : "keyword", "cql_collection": "singleton"},
+                "last_name": {"type" : "keyword", "cql_collection": "singleton"},
+                "email": {"type" : "keyword", "cql_collection": "singleton"},
+                "dob": {"type" : "date", "format": "yyyy-mm-dd", "cql_collection": "singleton"},
+                "gender": {"type" : "keyword", "cql_collection": "singleton"},
+                "display_name": {"type" : "keyword", "cql_collection": "singleton"},
+                "country": {"type" : "keyword", "cql_collection": "singleton"},
+                "language": {"type" : "keyword", "cql_collection": "singleton"},
+                "device_token": {"type" : "keyword", "cql_collection": "singleton"},
+                "device_type": {"type" : "keyword", "cql_collection": "singleton"},
+                "lat": {"type" : "double", "cql_collection": "singleton"},
+                "long": {"type" : "double", "cql_collection": "singleton"},
+                "city": {"type" : "keyword", "cql_collection": "singleton"},
+                "area": {"type" : "keyword", "cql_collection": "singleton"},
+                "pincode": {"type" : "long", "cql_collection": "singleton"}
+            }
+        }
+    }
+}'
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/users_interest/" -d '{
+    "settings": { "keyspace" : "cheersusers"},
+    "mappings" : {
+        "interest": {
+            "properties": {
+                "userid": {"type" : "keyword", "cql_collection": "singleton"},
+                "interest": {"type" : "keyword", "cql_collection": "singleton"},
+                "date_created": {"type" : "date", "cql_collection": "singleton"}
+            }
+        }
+    }
+}'
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/users_situational_interest/" -d '{
+    "settings": { "keyspace" : "cheersusers"},
+    "mappings" : {
+        "situational_interest": {
+            "properties": {
+                "userid": {"type" : "keyword", "cql_collection": "singleton"},
+                "interest": {"type" : "keyword", "cql_collection": "singleton"},
+                "date_created": {"type" : "date", "cql_collection": "singleton"}
+            }
+        }
+    }
+}'
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/users_occupational_interest/" -d '{
+    "settings": { "keyspace" : "cheersusers"},
+    "mappings" : {
+        "occupational_interest": {
+            "properties": {
+                "userid": {"type" : "keyword", "cql_collection": "singleton"},
+                "interest": {"type" : "keyword", "cql_collection": "singleton"},
+                "date_created": {"type" : "date", "cql_collection": "singleton"}
+            }
+        }
+    }
+}'
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/users_school/" -d '{
+    "settings": { "keyspace" : "cheersusers"},
+    "mappings" : {
+        "school": {
+            "properties": {
+                "userid": {"type" : "keyword", "cql_collection": "singleton"},
+                "name": {"type" : "keyword", "cql_collection": "singleton"},
+                "visibility_status": {"type" : "keyword", "cql_collection": "singleton"},
+                "isUpdated": {"type" : "boolean", "cql_collection": "singleton"},
+                "isDeleted": {"type" : "boolean", "cql_collection": "singleton"},
+                "date_created": {"type" : "date", "cql_collection": "singleton"}
+            }
+        }
+    }
+}'
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/users_college/" -d '{
+    "settings": { "keyspace" : "cheersusers"},
+    "mappings" : {
+        "college": {
+            "properties": {
+                "userid": {"type" : "keyword", "cql_collection": "singleton"},
+                "name": {"type" : "keyword", "cql_collection": "singleton"},
+                "visibility_status": {"type" : "keyword", "cql_collection": "singleton"},
+                "isUpdated": {"type" : "boolean", "cql_collection": "singleton"},
+                "isDeleted": {"type" : "boolean", "cql_collection": "singleton"},
+                "date_created": {"type" : "date", "cql_collection": "singleton"}
+            }
+        }
+    }
+}'
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/users_occupation/" -d '{
+    "settings": { "keyspace" : "cheersusers"},
+    "mappings" : {
+        "occupation": {
+            "properties": {
+                "userid": {"type" : "keyword", "cql_collection": "singleton"},
+                "name": {"type" : "keyword", "cql_collection": "singleton"},
+                "visibility_status": {"type" : "keyword", "cql_collection": "singleton"},
+                "isUpdated": {"type" : "boolean", "cql_collection": "singleton"},
+                "isDeleted": {"type" : "boolean", "cql_collection": "singleton"},
+                "date_created": {"type" : "date", "cql_collection": "singleton"}
+            }
+        }
+    }
+}'

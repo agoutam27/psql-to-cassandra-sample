@@ -1,0 +1,62 @@
+// index creation
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_users_relationships/" -d '{
+   "settings" : { "keyspace" : "wisdom_users" } }
+}'
+
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_users_block/" -d '{
+   "settings" : { "keyspace" : "wisdom_users" } }
+}'
+
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_users_friend_request/" -d '{
+   "settings" : { "keyspace" : "wisdom_users" } }
+}'
+
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_users_follow/" -d '{
+   "settings" : { "keyspace" : "wisdom_users" } }
+}'
+
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_users_hifi/" -d '{
+   "settings" : { "keyspace" : "wisdom_users" } }
+}'
+
+
+// mapping creation
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_users_relationships/_mapping/user_relationship" -d '{
+    "user_relationship" : {
+        "discover" : ".*"
+    }
+}'
+
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_users_block/_mapping/block" -d '{
+    "block" : {
+        "discover" : ".*"
+    }
+}'
+
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_users_friend_request/_mapping/friend_request" -d '{
+    "friend_request" : {
+        "discover" : ".*"
+    }
+}'
+
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_users_follow/_mapping/follow" -d '{
+    "follow" : {
+        "discover" : ".*"
+    }
+}'
+
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_users_hifi/_mapping/hifi" -d '{
+    "hifi" : {
+        "discover" : ".*"
+    }
+}'
+

@@ -1,0 +1,254 @@
+/* Use /_count API for count and for list use /_search API */
+Get list of users who blocked me  - Get list of all followers of me - Get list of all users hified me
+{
+  "query": {
+    "term": {
+      "to_user": {
+        "value": "<USER_ID>"
+      }
+    }
+  }
+}
+
+
+Get list of users who sent the friend request (All pending request) - Get the friendship request count received to me
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "term": {
+            "to_user": {
+              "value": "user3"
+            }
+          }
+        },
+        {
+          "term": {
+            "request_status": {
+              "value": "Pending"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
+
+Get list of users blocked by me  - Get list of users followed by me - Get list of users hified by me
+{
+    "query": {
+        "term": {
+            "from_user": {
+                "value": "<USER_ID>"
+            }
+        }
+    }
+}
+
+Get list of users to which i have sent the friendship request (All pending request)
+{
+    "query": {
+      "bool": {
+        "must": [
+          {
+            "term": {
+              "from_user": {
+                "value": "<USER_ID>"
+              }
+            }
+          },
+          {
+            "term": {
+              "request_status": {
+                "value": "Pending"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+
+
+Check whether a user is blocked by the other user - Check whether a user is a follower of me - Check whether a user is following the other user
+Check whether a user sent a hifi to me - Check whether i have sent a hifi to other user
+{
+    "query": {
+      "bool": {
+        "must": [
+          {
+            "term": {
+              "from_user": {
+                "value": "<USER_FROM_WHO_INITITATED_INTERACTION>"
+              }
+            }
+          },
+          {
+            "term": {
+              "to_user": {
+                "value": "<USER_TO_WHO_RECEIVED_INTERACTION>"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+
+Check whether a user is a friend of other user (If count == 1 then true else false)
+{
+    "query": {
+      "bool": {
+        "must": [
+          {
+            "terms": {
+              "from_user": [
+                "user5",
+                "user2"
+              ]
+            }
+          },
+          {
+            "terms": {
+              "to_user": [
+                "user5","user2"
+              ]
+            }
+          },
+          {
+            "term": {
+              "request_status": "Accepted"
+            }
+          }
+        ]
+      }
+    }
+  }
+
+Get the block count of users who i have blocked - Get the followers count who is following me
+Get the following count whom i have been following - Get the hifi count who hified me - Get the hifi count whom i have been hified
+{
+    "query": {
+      "term": {
+        "to_user": {
+          "value": "<USER_ID_TO_INTERACTION_hAPPENED>"
+        }
+      }
+    }
+  }
+           --------- OR ---------
+
+{
+    "query": {
+        "term": {
+            "from_user": {
+                "value": "<USER_FROM_WHO_INITIATED_INTERACTION>"
+            }
+        }
+    }
+}
+
+
+
+Get list of users who is friends with me (_search)
+Get the total count of users who are friends with me (_count)
+{
+    "query": {
+      "bool": {
+        "must": [
+          {
+            "term": {
+              "request_status": {
+                "value": "Accepted"
+              }
+            }
+          }
+        ], 
+        "should": [
+          {
+            "term": {
+              "from_user": "user2"
+            }
+          },
+          {
+            "term": {
+              "to_user": "user2"
+            }
+          }
+        ]
+      }
+    }
+  }
+
+
+Check whether a user and me are mutually hified each other
+/*  If count == 2 then true else false */
+{
+    "query": {
+      "bool": {
+        "must": [
+          {
+            "terms": {
+              "from_user": [
+                "user4",
+                "user7"
+              ]
+            }
+          },
+          {
+            "terms": {
+              "to_user": [
+                "user4",
+                "user7"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+
+
+Get the total user count in the network
+/* /_count on user_details index */
+
+
+Get the mutual hifi count of a user
+/* Application level join on the queries */
+/* Get All the users whom he/she hified and get a list of user ids */
+{
+    "query": {
+      "term": {
+        "from_user": {
+          "value": "<USER_ID_1>"
+        }
+      }
+    },
+    "stored_fields": [
+      "to_user"
+    ]
+  }
+/* Then run this query with /_count API to get count */
+{
+    "query": {
+      "bool": {
+        "must": [
+          {
+            "terms": {
+              "from_user": [
+                <RESULT OF ABOVE QUERY>
+              ]
+            }
+          },
+          {
+            "term": {
+              "to_user": {
+                "value": "<USER_ID_1>"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }

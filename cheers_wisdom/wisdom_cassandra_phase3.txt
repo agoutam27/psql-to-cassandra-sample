@@ -1,0 +1,153 @@
+CREATE TABLE wisdom_users.expressions (
+    expression_id text,
+    user_id text,
+    name varchar,
+    media_urls text,
+    "isDeleted" boolean,
+    clubbies list<text>,
+    tags list<text>,
+    date_created timestamp,
+    situational_interest text,
+    PRIMARY KEY ("expression_id")
+) WITH bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+CREATE CUSTOM INDEX elastic_expressions_idx ON wisdom_users.expressions () USING 'org.elassandra.index.ExtendedElasticSecondaryIndex';
+
+
+CREATE TABLE wisdom_users.expression_likes (
+    expression_id text,
+    user_id text,
+    date_created timestamp,
+    "isDeleted" boolean,
+    PRIMARY KEY ("expression_id", "user_id")
+) WITH bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+CREATE CUSTOM INDEX elastic_expression_likes_idx ON wisdom_users.expression_likes () USING 'org.elassandra.index.ExtendedElasticSecondaryIndex';
+
+
+
+CREATE TABLE wisdom_users.expression_comments (
+    comment_id text,
+    expression_id text,
+    user_id text,
+    parent_id text,
+    comment varchar,
+    date_created timestamp,
+    "isDeleted" boolean,
+    PRIMARY KEY ("comment_id")
+) WITH bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+CREATE CUSTOM INDEX elastic_expression_comments_idx ON wisdom_users.expression_comments () USING 'org.elassandra.index.ExtendedElasticSecondaryIndex';
+
+
+CREATE TABLE wisdom_users.user_mentions (
+    expression_id text,
+    user_id text,
+    comment_id text,
+    "isDeleted" boolean,
+    PRIMARY KEY ("expression_id", "user_id", "comment_id")
+) WITH bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+CREATE CUSTOM INDEX elastic_user_mentions_idx ON wisdom_users.user_mentions () USING 'org.elassandra.index.ExtendedElasticSecondaryIndex';
+
+
+
+CREATE TABLE wisdom_users.user_memories (
+    bunker_id text,
+    memories list<text>,
+    date_created timestamp,
+    "isDeleted" boolean,
+    PRIMARY KEY ("bunker_id")
+) WITH bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+CREATE CUSTOM INDEX elastic_user_memories_idx ON wisdom_users.user_memories () USING 'org.elassandra.index.ExtendedElasticSecondaryIndex';
+
+
+// Dummy data
+
+INSERT INTO wisdom_users.expressions (expression_id, user_id, name, media_urls, "isDeleted", clubbies, situational_interest, date_created) VALUES ('exp1', 'user1', 'Expression 1 here', 'NA', false, [], 'Interest1', '2021-04-01');
+INSERT INTO wisdom_users.expressions (expression_id, user_id, name, media_urls, "isDeleted", clubbies, situational_interest, date_created) VALUES ('exp2', 'user1', 'Expression 2 here', 'NA', false, ['exp1'], 'Interest2', '2021-05-01');
+INSERT INTO wisdom_users.expressions (expression_id, user_id, name, media_urls, "isDeleted", clubbies, situational_interest, date_created) VALUES ('exp3', 'user2', 'Expression 3 here', 'NA', false, ['exp1'], 'Interest1', '2021-06-01');
+INSERT INTO wisdom_users.expressions (expression_id, user_id, name, media_urls, "isDeleted", clubbies, situational_interest, date_created) VALUES ('exp4', 'user3', 'Expression 4 here', 'NA', false, ['exp2', 'exp3'], 'Interest3', '2021-07-01');
+INSERT INTO wisdom_users.expressions (expression_id, user_id, name, media_urls, "isDeleted", clubbies, situational_interest, date_created) VALUES ('exp5', 'user4', 'Expression 5 here', 'NA', false, ['exp1', 'exp2', 'exp3'], 'Interest1', '2021-03-01');
+
+UPDATE wisdom_users.expressions SET tags = tags + ['Tag1', 'Tag2'] WHERE expression_id = 'exp1' AND user_id = 'user1';
+UPDATE wisdom_users.expressions SET tags = tags + ['Tag2', 'Tag3', 'Tag4'] WHERE expression_id = 'exp2' AND user_id = 'user1';
+UPDATE wisdom_users.expressions SET tags = tags + ['Tag1', 'Tag4'] WHERE expression_id = 'exp3' AND user_id = 'user2';
+UPDATE wisdom_users.expressions SET tags = tags + ['Tag1', 'Tag2'] WHERE expression_id = 'exp4' AND user_id = 'user3';
+
+INSERT INTO wisdom_users.expression_likes (expression_id, user_id, date_created, "isDeleted") VALUES ('exp1', 'user2', toTimeStamp(now()), false);
+INSERT INTO wisdom_users.expression_likes (expression_id, user_id, date_created, "isDeleted") VALUES ('exp1', 'user3', toTimeStamp(now()), false);
+INSERT INTO wisdom_users.expression_likes (expression_id, user_id, date_created, "isDeleted") VALUES ('exp1', 'user4', toTimeStamp(now()), false);
+INSERT INTO wisdom_users.expression_likes (expression_id, user_id, date_created, "isDeleted") VALUES ('exp2', 'user1', toTimeStamp(now()), false);
+INSERT INTO wisdom_users.expression_likes (expression_id, user_id, date_created, "isDeleted") VALUES ('exp3', 'user1', toTimeStamp(now()), false);
+
+
+INSERT INTO wisdom_users.expression_comments (comment_id, expression_id, user_id, comment, date_created, "isDeleted") VALUES ('com1', 'exp1', 'user2', 'Comment 1', toTimeStamp(now()), false);
+INSERT INTO wisdom_users.expression_comments (comment_id, expression_id, user_id, comment, date_created, "isDeleted") VALUES ('com2', 'exp1', 'user2', 'Comment 1', toTimeStamp(now()), false);
+INSERT INTO wisdom_users.expression_comments (comment_id, expression_id, user_id, parent_id, comment, date_created, "isDeleted") VALUES ('com3', 'exp1', 'user2', 'com1', 'Comment 1', toTimeStamp(now()), false);
+INSERT INTO wisdom_users.expression_comments (comment_id, expression_id, user_id, parent_id, comment, date_created, "isDeleted") VALUES ('com4', 'exp1', 'user2', 'com3', 'Comment 1', toTimeStamp(now()), false);
+INSERT INTO wisdom_users.expression_comments (comment_id, expression_id, user_id, comment, date_created, "isDeleted") VALUES ('com5', 'exp2', 'user2', 'Comment 1', toTimeStamp(now()), false);
+
+
+INSERT INTO wisdom_users.user_memories (bunker_id, memories, date_created, "isDeleted") VALUES ('bun1', ['exp1', 'exp2', 'exp3', 'exp4'], toTimeStamp(now()), false);

@@ -1,0 +1,193 @@
+// Get the all the expressions for a user with pagination of 6 per page (Change from to 0 then 6 and then 12 and so on)
+
+{
+  "size": 6,
+  "from": 0, 
+  "query": {
+    "term": {
+      "user_id": {
+        "value": "user1"
+      }
+    }
+  },
+  "sort": [
+    {
+      "expression_id": {
+        "order": "desc"
+      }
+    }
+  ]
+}
+
+// Get the like count for an expression (_count API)
+
+{
+    "query": {
+      "term": {
+        "expression_id": {
+          "value": "exp1"
+        }
+      }
+    }
+  }
+
+
+
+// Get list of all users who liked the expression (use _search API)
+
+{
+    "query": {
+      "term": {
+        "expression_id": {
+          "value": "exp1"
+        }
+      }
+    }
+  }
+
+
+
+//  Get total count of comments for the expression (use _count API)
+
+{
+    "query": {
+      "term": {
+        "expression_id": {
+          "value": "exp1"
+        }
+      }
+    }
+  }
+
+
+
+// Get the all the comments for an expresion with pagination of 5 per page
+
+{
+    "size": 5,
+    "from": 0, 
+    "query": {
+      "term": {
+        "expression_id": {
+          "value": "exp1"
+        }
+      }
+    },
+    "sort": [
+      {
+        "comment_id": {
+          "order": "asc"
+        }
+      }
+    ]
+  }
+
+
+
+// Get the all the reply comments for an parent comment with pagination of 5 per page
+{
+    "size": 5,
+    "from": 0, 
+    "query": {
+      "term": {
+        "parent_id": {
+          "value": "com1"
+        }
+      }
+    },
+    "sort": [
+      {
+        "comment_id": {
+          "order": "asc"
+        }
+      }
+    ]
+  }
+
+
+
+// Get the total count of a stituational interest that mapped to expressions (_count API)
+
+{
+    "query": {
+      "term": {
+        "situational_interest": {
+          "value": "Interest1"
+        }
+      }
+    }
+  }
+
+
+
+// Get all the popular expressions in the network (from last 6 months) (Change now-6M to now-1w for trending)
+
+{
+  "query": {
+    "range": {
+      "date_created": {
+        "gte": "now-6M/d",
+        "lte": "now"
+      }
+    }
+  },
+  "aggs": {
+    "user_exp": {
+      "terms": {
+        "field": "user_id"
+        
+      },
+      "aggs": {
+        "top": {
+          "top_hits": {
+            "size": 10
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+// Search the tags from the posted expressions in the network 
+
+{
+    "query": {
+      "term": {
+        "expression_id": {
+          "value": "exp1"
+        }
+      }
+    },
+    "stored_fields": [
+      "tags"
+    ]
+  }
+
+
+// Get all the expression list based on tags, filtering out the current logged in user posts
+{
+  "query": {
+    "bool": {
+      "must_not": [
+        {
+          "term": {
+            "user_id": {
+              "value": "user1"
+            }
+          }
+        }
+      ],
+      "must": [
+        {
+          "term": {
+            "tags": {
+              "value": "Tag1"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

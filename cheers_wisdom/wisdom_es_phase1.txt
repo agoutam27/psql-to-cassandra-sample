@@ -1,0 +1,73 @@
+// Index creation
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_users/" -d '{
+   "settings" : { "keyspace" : "wisdom_users" } }
+}'
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_users_school/" -d '{
+   "settings" : { "keyspace" : "wisdom_users" } }
+}'
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_users_college/" -d '{
+   "settings" : { "keyspace" : "wisdom_users" } }
+}'
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_users_occupation/" -d '{
+   "settings" : { "keyspace" : "wisdom_users" } }
+}'
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_users_interest/" -d '{
+   "settings" : { "keyspace" : "wisdom_users" } }
+}'
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_users_situational_interest/" -d '{
+   "settings" : { "keyspace" : "wisdom_users" } }
+}'
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_users_occupational_interest/" -d '{
+   "settings" : { "keyspace" : "wisdom_users" } }
+}'
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_users_occupational_interest/" -d '{
+   "settings" : { "keyspace" : "wisdom_users" } }
+}'
+
+
+// Mapping creation
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_users_college/_mapping/college" -d '{
+    "college" : {
+        "discover" : ".*"
+    }
+}'
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_users_school/_mapping/school" -d '{
+    "school" : {
+        "discover" : ".*"
+    }
+}'
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_users_occupation/_mapping/occupation" -d '{
+    "occupation" : {
+        "discover" : ".*"
+    }
+}'
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_users_interest/_mapping/interest" -d '{
+    "interest" : {
+        "discover" : ".*"
+    }
+}'
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_users_situational_interest/_mapping/situational_interest" -d '{
+    "situational_interest" : {
+        "discover" : ".*"
+    }
+}'
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_users_occupational_interest/_mapping/occupational_interest" -d '{
+    "occupational_interest" : {
+        "discover" : ".*"
+    }
+}'
+
+

@@ -1,0 +1,56 @@
+// index creation
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_expressions/" -d '{
+   "settings" : { "keyspace" : "wisdom_users" } }
+}'
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_expressions_likes/" -d '{
+   "settings" : { "keyspace" : "wisdom_users" } }
+}'
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_expressions_comments/" -d '{
+   "settings" : { "keyspace" : "wisdom_users" } }
+}'
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_user_mentions/" -d '{
+   "settings" : { "keyspace" : "wisdom_users" } }
+}'
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_user_memories/" -d '{
+   "settings" : { "keyspace" : "wisdom_users" } }
+}'
+
+
+// mapping creation
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_expressions/_mapping/expressions" -d '{
+    "expressions" : {
+        "discover" : ".*"
+    }
+}'
+
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_expressions_likes/_mapping/expression_likes" -d '{
+    "expression_likes" : {
+        "discover" : ".*"
+    }
+}'
+
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_expressions_comments/_mapping/expression_comments" -d '{
+    "expression_comments" : {
+        "discover" : ".*"
+    }
+}'
+
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_user_mentions/_mapping/user_mentions" -d '{
+    "user_mentions" : {
+        "discover" : ".*"
+    }
+}'
+
+curl -XPUT -H 'Content-Type: application/json' "http://localhost:9200/wisdom_user_memories/_mapping/user_memories" -d '{
+    "user_memories" : {
+        "discover" : ".*"
+    }
+}'
